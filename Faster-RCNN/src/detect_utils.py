@@ -2,8 +2,7 @@ import torchvision.transforms as transforms
 import cv2
 import numpy as np
 
-from .coco_names import COCO_INSTANCE_CATEGORY_NAMES as coco_names
-
+from coco_names import COCO_INSTANCE_CATEGORY_NAMES as coco_names
 # this will help us create a different color for each class
 COLORS = np.random.uniform(0, 255, size=(len(coco_names), 3))
 
@@ -38,13 +37,14 @@ def predict(image, model, device, detection_threshold):
 def draw_boxes(boxes, classes, labels, image):
     # read the image
     image = cv2.cvtColor(np.asarray(image), cv2.COLOR_BGR2RGB)
+    # image = image.astype(np.float32)
 
     for i, box in enumerate(boxes):
         color = COLORS[labels[i]]
         cv2.rectangle(
             image,
             (int(box[0]), int(box[1])),
-            int(box[2]), int(box[3]),
+            (int(box[2]), int(box[3])),
             color, 2
         )
         cv2.putText(image, classes[i], (int(box[0]), int(box[1]-5)),
